@@ -5,8 +5,10 @@ import com.example.hotel_mobile.Dto.request.BookingRequestDto
 import com.example.hotel_mobile.Dto.RoomDto
 import com.example.hotel_mobile.Dto.RoomTypeDto
 import com.example.hotel_mobile.Dto.response.BookingResponseDto
+import com.example.hotel_mobile.Dto.response.UserDto
 import com.example.hotel_mobile.Modle.NetworkCallHandler
 import com.example.hotel_mobile.Modle.Request.RoomCreationModel
+import com.example.hotel_mobile.Modle.Request.UserUpdateMoule
 import com.example.hotel_mobile.Util.General
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -15,6 +17,7 @@ import io.ktor.client.request.forms.append
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
@@ -33,7 +36,7 @@ class HotelRepository @Inject constructor(private val httpClient: HttpClient) {
             NetworkCallHandler {
         return try {
 
-            val result = httpClient.get( "${General.BASED_URL}/user/roomtype")
+            val result = httpClient.get("${General.BASED_URL}/user/roomtype")
             {
                 headers {
                     append(
@@ -66,11 +69,9 @@ class HotelRepository @Inject constructor(private val httpClient: HttpClient) {
 
     }
 
-
-
     suspend fun createRoom(roomData: RoomCreationModel): NetworkCallHandler {
         return try {
-            val result = httpClient.post("${General.BASED_URL}/user/room")
+            val result = httpClient.post("${General.BASED_URL}/room")
             {
                 headers {
                     append(
@@ -162,11 +163,11 @@ class HotelRepository @Inject constructor(private val httpClient: HttpClient) {
             var url = ""
             when (isBelongTomMe) {
                 false -> {
-                    url = "${General.BASED_URL}/user/room/${pageNumber}";
+                    url = "${General.BASED_URL}/room/${pageNumber}";
                 }
 
                 else -> {
-                    url = "${General.BASED_URL}/user/room/me/${pageNumber}"
+                    url = "${General.BASED_URL}/room/me/${pageNumber}"
                 }
             }
             val result = httpClient.get(url)
@@ -203,42 +204,6 @@ class HotelRepository @Inject constructor(private val httpClient: HttpClient) {
 
     }
 
-
-    suspend fun getMyRooms(pageNumber: Int): NetworkCallHandler {
-        return try {
-            val result = httpClient.get("${General.BASED_URL}/user/room/me/${pageNumber}")
-            {
-                headers {
-                    append(
-                        HttpHeaders.Authorization,
-                        "Bearer ${General.authData.value?.refreshToken}"
-                    )
-                }
-            }
-
-            if (result.status == HttpStatusCode.OK) {
-                val resultData = result.body<List<RoomDto>>();
-                NetworkCallHandler.Successful(resultData)
-            } else {
-
-                NetworkCallHandler.Error(result.body())
-            }
-
-        } catch (e: UnknownHostException) {
-
-            return NetworkCallHandler.Error(e.message)
-
-        } catch (e: IOException) {
-
-            return NetworkCallHandler.Error(e.message)
-
-        } catch (e: Exception) {
-
-            return NetworkCallHandler.Error(e.message)
-        }
-
-
-    }
 
     suspend fun getBookingDayAtSpecficMonthAndYear(year: Int, month: Int):
             NetworkCallHandler {
@@ -412,6 +377,124 @@ class HotelRepository @Inject constructor(private val httpClient: HttpClient) {
 
 
     }
+
+    suspend fun getMyIfo(): NetworkCallHandler {
+        return try {
+
+            val result = httpClient
+                .get("${General.BASED_URL}/user/info")
+                {
+                    contentType(ContentType.Application.Json)
+                    headers {
+                        append(
+                            HttpHeaders.Authorization,
+                            "Bearer ${General.authData.value?.refreshToken}"
+                        )
+                    }
+                }
+
+            if (result.status == HttpStatusCode.OK) {
+                val resultData = result.body<UserDto>();
+                NetworkCallHandler.Successful(resultData)
+            } else {
+                NetworkCallHandler.Error(result.body())
+            }
+
+        } catch (e: UnknownHostException) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+
+        } catch (e: IOException) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+
+        } catch (e: Exception) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+        }
+
+
+    }
+
+    suspend fun updateMyInfo(updateData: UserUpdateMoule): NetworkCallHandler {
+        return try {
+
+            val result = httpClient
+                .put("${General.BASED_URL}/user")
+                {
+                    contentType(ContentType.Application.Json)
+                    headers {
+                        append(
+                            HttpHeaders.Authorization,
+                            "Bearer ${General.authData.value?.refreshToken}"
+                        )
+                    }
+
+                    setBody(
+                        MultiPartFormDataContent(
+                            formData {
+                                append("id", updateData.id.toString())
+                                updateData.name?.let { append("name", it) }
+                                updateData.email?.let { append("email", it) }
+                                updateData.phone?.let { append("phone", it) }
+                                updateData.address?.let { append("address", it) }
+                                updateData.userName?.let { append("userName", it) }
+                                updateData.password?.let { append("password", it) }
+                                updateData.currenPassword?.let { append("currenPassword", it) }
+
+                                if (updateData.imagePath != null)
+                                    append(
+                                        key = "imagePath",
+                                        value = updateData.imagePath.readBytes(),
+                                        headers = Headers.build {
+                                            append(
+                                                HttpHeaders.ContentType,
+                                                "image/${updateData.imagePath.extension}"
+                                            )
+                                            append(
+                                                HttpHeaders.ContentDisposition,
+                                                "filename=${updateData.imagePath.name}"
+                                            )
+                                        }
+                                    )
+
+
+                            }
+
+                        )
+
+                    )
+                }
+
+            if (result.status == HttpStatusCode.OK) {
+                val resultData = result.body<String>();
+                NetworkCallHandler.Successful(resultData)
+            } else {
+                NetworkCallHandler.Error(result.body())
+            }
+
+        } catch (e: UnknownHostException) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+
+        } catch (e: IOException) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+
+        } catch (e: Exception) {
+            Log.d("bookingErrorIs", e.message.toString())
+
+            return NetworkCallHandler.Error(e.message)
+        }
+
+
+    }
+
 
 }
 

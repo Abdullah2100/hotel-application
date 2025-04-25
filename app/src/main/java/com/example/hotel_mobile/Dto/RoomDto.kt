@@ -1,5 +1,6 @@
 package com.example.hotel_mobile.Dto
 
+import com.example.hotel_mobile.Dto.response.UserDto
 import com.example.hotel_mobile.services.kSerializeChanger.UUIDKserialize
 import kotlinx.serialization.Serializable
 import java.util.UUID

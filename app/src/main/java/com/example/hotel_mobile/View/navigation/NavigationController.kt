@@ -13,10 +13,12 @@ import com.example.hotel_mobile.Modle.Screens
 import com.example.hotel_mobile.Util.RoomNavType
 import com.example.hotel_mobile.View.Pages.BookingForMyRoom
 import com.example.hotel_mobile.View.Pages.BookingPage
+import com.example.hotel_mobile.View.Pages.EditeProfilePage
 import com.example.hotel_mobile.View.Pages.HomePage
 import com.example.hotel_mobile.View.Pages.MyRoom
 import com.example.hotel_mobile.View.Pages.RoomCreate
 import com.example.hotel_mobile.View.Pages.RoomPage
+import com.example.hotel_mobile.View.Pages.SettingPage
 import com.example.hotel_mobile.View.Pages.SignUpPage
 import com.example.hotel_mobile.ViewModle.AuthViewModle
 import com.example.hotel_mobile.ViewModle.HomeViewModle
@@ -61,8 +63,17 @@ fun NavController(
                 HomePage(navController,homeViewModle)
             }
 
+            composable<Screens.editeProfile> {
+                EditeProfilePage(homeViewModle,navController)
+            }
+
+
             composable<Screens.booking> {
                 BookingPage(nav = navController, homeViewModel = homeViewModle)
+            }
+
+            composable<Screens.setting> {
+                SettingPage(nav = navController, homeViewModel = homeViewModle)
             }
             composable<Screens.myRooms> {
                 MyRoom(nav = navController, homeViewModel = homeViewModle)

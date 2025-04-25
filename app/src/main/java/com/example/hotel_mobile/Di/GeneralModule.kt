@@ -92,7 +92,7 @@ class GeneralModule {
 
             install(Auth) {
                 bearer {
-//                  sendWithoutRequest { true }
+                //  sendWithoutRequest { true }
                     loadTokens {
                         BearerTokens(
                             General.authData.value?.token?:"",

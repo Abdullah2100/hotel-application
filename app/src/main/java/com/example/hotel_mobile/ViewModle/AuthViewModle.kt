@@ -22,6 +22,7 @@ import com.example.hotel_mobile.Dto.SingUpDto
 import com.example.hotel_mobile.Modle.NetworkCallHandler
 import com.example.hotel_mobile.Modle.Screens
 import com.example.hotel_mobile.Util.General
+import com.example.hotel_mobile.Util.Validation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json.Default.decodeFromString
+import java.time.LocalDate
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
@@ -67,15 +69,9 @@ class AuthViewModle @Inject constructor(
         snackbarHostState: SnackbarHostState
     ): Boolean {
         var message = ""
-        val emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$".toRegex()
-        val passwordContainCharCapitaRegex = "^(?=(.*[A-Z].*[A-Z])).*$".toRegex()
-        val passwordContainCharSmallRegex = "^(?=(.*[a-z].*[a-z])).*$".toRegex()
-        val passwordContainNumberRegex = "^(?=(.*\\d.*\\d)).*$".toRegex()
 
-        val passwordContainSpicialCharecterRegex = """
-                   ^(?=(.*[!@#\\${'$'}%^&*()_+|/?<>:;'\\"-].*[!@#\\${'$'}%^&*()_+|/?<>:;'\\"-])).*${'$'}
-        """.trimIndent()
-            .toRegex()
+
+        Log.d("brithday ","${userDto.brithDay.toString()}")
 
         if (userDto.name.length < 1) {
             message = "الاسم لا يمكن ان يكون فارغا"
@@ -85,23 +81,26 @@ class AuthViewModle @Inject constructor(
             message = "الايميل لا يمكن ان يكون فارغا"
         else if (userDto.phone.length > 10 || userDto.phone.isEmpty())
             message = "رقم الهاتف لا يمكن ان يكون فارغا او اكثر من 10"
-        else if (userDto.brithDay==null)
+        else if (userDto.brithDay==null )
             message = "تاريخ الميلاد لا يمكن ان يكون فارغا"
+
+        else if ((LocalDate.now().year-userDto.brithDay.year)<18)
+            message = "لا بد ان يكون العمر اكبر من 17 سنة"
         else if (userDto.address.isEmpty())
             message = " العنوان لا يمكن ان يكون فارغا"
         else if (userDto.password.isEmpty())
             message = "كلمة المرور لا يمكن ان تكون فارغا"
         else if (userDto.password.isEmpty() || userDto.password.length > 16)
             message = "كلمة المرور لا بد ان لا تكون فارغة او اكثر من 16 حرف"
-        else if (!userDto.email.matches(emailRegex))
+        else if (!Validation.emailValidation(userDto.email))
             message = "لا بد من ادخال ايميل  صالح"
-        else if (!userDto.password.matches(passwordContainCharCapitaRegex))
+        else if (!Validation.passwordCapitalValidation(userDto.password))
             message = "لا بد ان تحتوي كلمة المرور على حرفين  capital"
-        else if (!userDto.password.matches(passwordContainCharSmallRegex))
+        else if (!Validation.passwordSmallValidation(userDto.password))
             message = "لا بد ان تحتوي كلمة المرور على حرفين  small"
-        else if (!userDto.password.matches(passwordContainNumberRegex))
+        else if (!Validation.passwordNumberValidation(userDto.password))
             message = "لا بد ان تحتوي كلمة المرور على رقمين"
-        else if (!userDto.password.matches(passwordContainSpicialCharecterRegex))
+        else if (!Validation.passwordSpicialCharracterValidation(userDto.password))
             message = "لا بد ان تحتوي كلمة المرور على رمزين"
         if (message.isNotEmpty()) {
             _statusChange.emit(enNetworkStatus.None)

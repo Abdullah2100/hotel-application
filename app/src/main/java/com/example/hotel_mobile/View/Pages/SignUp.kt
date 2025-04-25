@@ -2,6 +2,7 @@ package com.example.hotel_mobile.View.Pages
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -54,6 +57,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
@@ -118,8 +122,52 @@ fun SignUpPage(
                 it.calculateBottomPadding()
 
 
-                ConstraintLayout {
+                ConstraintLayout(
+                    modifier = Modifier.clickable {
+                        keyboardController?.hide()
+                    }
+                ) {
                     val (goToReiginster, form) = createRefs();
+
+
+                    if (showDatePicker.value)
+                      {
+                                DatePickerDialog(
+                                    onDismissRequest = {
+                                        showDatePicker.value = false
+
+                                    },
+                                    confirmButton = {
+                                        Button(
+                                            onClick = {
+                                                showDatePicker.value = false
+                                            },
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color.Transparent
+                                            )
+                                        ) {
+
+                                            Text("تم", color = Color.Black)
+                                        }
+                                    },
+                                    dismissButton = {
+                                        Button(
+                                            onClick = {
+                                                showDatePicker.value = false
+                                            },
+                                            colors = ButtonDefaults.buttonColors(
+                                                containerColor = Color.Transparent
+                                            )
+                                        ) {
+                                            Text("الغاء", color = Color.Black)
+                                        }
+                                    },
+                                )
+                                {
+                                    DatePicker(state = datePickerState)
+
+                            }
+                    }
 
 
                     Column(
@@ -138,42 +186,7 @@ fun SignUpPage(
                         verticalArrangement = Arrangement.Center
                     ) {
 
-                        if (showDatePicker.value)
-                            DatePickerDialog(
-                                onDismissRequest = {
-                                    showDatePicker.value = false
 
-                                },
-                                confirmButton = {
-                                    Button(
-                                        onClick = {
-                                            showDatePicker.value = false
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color.Transparent
-                                        )
-                                    ) {
-
-                                        Text("تم", color = Color.Black)
-                                    }
-                                },
-                                dismissButton = {
-                                    Button(
-                                        onClick = {
-                                            showDatePicker.value = false
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color.Transparent
-                                        )
-                                    ) {
-                                        Text("الغاء", color = Color.Black)
-                                    }
-                                },
-                            )
-                            {
-                                DatePicker(state = datePickerState)
-
-                            }
 
                         OutlinedTextField(
                             maxLines = 1,
@@ -192,9 +205,12 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f)
+                                , unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         )
+
+
                         OutlinedTextField(
                             maxLines = 1,
                             value = userName.value,
@@ -212,6 +228,8 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f)
+
+                                , unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         )
@@ -233,6 +251,8 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f),
+
+                                 unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                             keyboardActions = KeyboardActions(onDone = {
@@ -257,6 +277,8 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f),
+
+                                unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Next,
@@ -331,6 +353,8 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f),
+
+                                unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                             keyboardActions = KeyboardActions(onDone = {
@@ -357,6 +381,8 @@ fun SignUpPage(
                             shape = RoundedCornerShape(19.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 unfocusedBorderColor = Color.Gray.copy(alpha = 0.46f),
+
+                                unfocusedTextColor = Color.Gray.copy(alpha = 0.46f)
                             ),
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                             keyboardActions = KeyboardActions(onDone = {
