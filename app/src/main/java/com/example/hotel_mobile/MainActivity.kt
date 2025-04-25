@@ -65,8 +65,9 @@ class MainActivity : ComponentActivity() {
                     Screens.booking,
                     Screens.myRooms,
                     Screens.bookingForMyRoom,
-                    Screens.home,
+                    Screens.setting,
                 )
+
                 val buttonNavItem = listOf(
                     ButtonSheetItem(
                         Icons.Default.Home,
@@ -92,6 +93,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
+
                 LaunchedEffect(isLogin.value) {
                     if (isLogin.value != null) {
                         keepSplash = false
@@ -111,6 +113,9 @@ class MainActivity : ComponentActivity() {
                                                 navBackStackEntry?.destination?.hasRoute(Screens.myRooms::class) == true
                                                 ||
                                                 navBackStackEntry?.destination?.hasRoute(Screens.bookingForMyRoom::class) == true
+
+                                                ||
+                                                navBackStackEntry?.destination?.hasRoute(Screens.setting::class) == true
                                                 ||
                                                 navBackStackEntry?.destination?.hasRoute(Screens.booking::class) == true
                                         )

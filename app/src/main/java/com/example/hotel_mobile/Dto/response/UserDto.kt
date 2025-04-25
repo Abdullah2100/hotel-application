@@ -1,5 +1,6 @@
-package com.example.hotel_mobile.Dto
+package com.example.hotel_mobile.Dto.response
 
+import com.example.hotel_mobile.Dto.PersonDto
 import com.example.hotel_mobile.services.kSerializeChanger.LocalDateTimeKserialize
 import com.example.hotel_mobile.services.kSerializeChanger.UUIDKserialize
 import kotlinx.serialization.Serializable

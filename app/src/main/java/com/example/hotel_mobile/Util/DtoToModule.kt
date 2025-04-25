@@ -4,7 +4,7 @@ import com.example.hotel_mobile.Dto.ImageDto
 import com.example.hotel_mobile.Dto.PersonDto
 import com.example.hotel_mobile.Dto.RoomDto
 import com.example.hotel_mobile.Dto.RoomTypeDto
-import com.example.hotel_mobile.Dto.UserDto
+import com.example.hotel_mobile.Dto.response.UserDto
 import com.example.hotel_mobile.Dto.response.BookingResponseDto
 import com.example.hotel_mobile.Modle.response.BookingModel
 import com.example.hotel_mobile.Modle.response.ImageModel

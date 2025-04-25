@@ -60,7 +60,8 @@ fun LoginPage(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val userNameOrEmail = remember { mutableStateOf(TextFieldValue("fackkk@gmail.com")) }
-    val password = remember { mutableStateOf(TextFieldValue("as!@AS23")) }
+    //val password = remember { mutableStateOf(TextFieldValue("as!@AS23")) }
+    val password = remember { mutableStateOf(TextFieldValue("AS!@as23")) }
 
     val errorMessage = finalScreenViewModel.errorMessage.collectAsState()
 

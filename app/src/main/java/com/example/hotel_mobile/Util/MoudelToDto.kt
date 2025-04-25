@@ -6,10 +6,8 @@ import com.example.hotel_mobile.Dto.ImageDto
 import com.example.hotel_mobile.Dto.PersonDto
 import com.example.hotel_mobile.Dto.RoomDto
 import com.example.hotel_mobile.Dto.RoomTypeDto
-import com.example.hotel_mobile.Dto.UserDto
+import com.example.hotel_mobile.Dto.response.UserDto
 import com.example.hotel_mobile.Modle.Request.BookingModleHolder
-import com.example.hotel_mobile.Modle.Request.RoomCreationModel
-import com.example.hotel_mobile.Modle.Request.RoomImageCreation
 import com.example.hotel_mobile.Modle.response.ImageModel
 import com.example.hotel_mobile.Modle.response.PersonModel
 import com.example.hotel_mobile.Modle.response.RoomModel

@@ -33,6 +33,13 @@ object Screens {
     object bookingForMyRoom
 
     @Serializable
+    object setting
+
+    @Serializable
+    object editeProfile
+
+
+    @Serializable
     data class Room(
        val roomdata:RoomDto
     )

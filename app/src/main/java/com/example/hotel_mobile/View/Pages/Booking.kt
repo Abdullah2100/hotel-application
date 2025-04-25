@@ -45,32 +45,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
-import com.example.hotel_mobile.CustomDatePicker.vsnappy1.datepicker.DatePicker
-import com.example.hotel_mobile.CustomDatePicker.vsnappy1.timepicker.TimePicker
-import com.example.hotel_mobile.Dto.RoomDto
-import com.example.hotel_mobile.Modle.enDropDownDateType
-import com.example.hotel_mobile.Modle.enNetworkStatus
-import com.example.hotel_mobile.R
-import com.example.hotel_mobile.Util.General
 import com.example.hotel_mobile.View.component.BookingLoaingHolder
 import com.example.hotel_mobile.View.component.BookingShape
 import com.example.hotel_mobile.View.component.CustomErrorSnackBar
-import com.example.hotel_mobile.View.component.CustomSizer
-import com.example.hotel_mobile.View.component.RoomLoaingHolder
-import com.example.hotel_mobile.View.component.RoomStateShape
 import com.example.hotel_mobile.ViewModle.HomeViewModle
 import kotlinx.coroutines.delay
 
@@ -88,7 +68,8 @@ fun BookingPage(
         homeViewModel = homeViewModel, authViewModel = null
     ) {
         Scaffold(
-            modifier = Modifier
+
+                    modifier = Modifier
                 .padding(top = 35.dp)
                 .fillMaxWidth()
                 .fillMaxHeight(),
