@@ -33,15 +33,21 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import com.example.hotel_mobile.Modle.Screens
+import com.example.hotel_mobile.Util.General
 import com.example.hotel_mobile.ViewModle.AuthViewModle
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
 fun CustomErrorSnackBar(
     authViewModel: AuthViewModle?=null,
     homeViewModel: HomeViewModle?=null,
-    page: @Composable() () -> Unit
+    page: @Composable() () -> Unit,
+    nav: NavHostController?=null
 ){
 
     val coroutine = rememberCoroutineScope()
@@ -49,6 +55,27 @@ fun CustomErrorSnackBar(
             else homeViewModel.errorMessage).collectAsState()
     val isVisible = remember { MutableTransitionState(false) }
 
+    val authData =if(homeViewModel!=null) homeViewModel
+        .authDataStreem
+        .collectAsStateWithLifecycle(AuthModleEntity(0,"","")) else null
+
+//    if(homeViewModel!=null && authData?.value==null&&nav!=null){
+//        nav.navigate(Screens.authGraph){
+//            popUpTo(nav.graph.id){
+//                inclusive=true
+//            }
+//        }
+//    }
+
+    LaunchedEffect(authData?.value==null) {
+            if(homeViewModel!=null && authData?.value==null&&nav!=null){
+        nav.navigate(Screens.authGraph){
+            popUpTo(nav.graph.id){
+                inclusive=true
+            }
+        }
+    }
+    }
 
     LaunchedEffect(error.value) {
         if (error.value?.isNotEmpty() == true) {

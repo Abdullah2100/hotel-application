@@ -37,6 +37,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 import io.ktor.client.request.url
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.Parameters
 
 
@@ -101,18 +102,33 @@ class GeneralModule {
                     }
 
                     refreshTokens {
-                        val refreshToken = client.
-                        post("${General.BASED_URL}/refreshToken/refresh") {
-                            url {
-                                parameters.append("tokenHolder", General.authData.value?.refreshToken ?: "")
+                        try {
+                            val refreshToken = client.
+                            post("${General.BASED_URL}/refreshToken/refresh") {
+                                url {
+                                    parameters.append("tokenHolder", General.authData.value?.refreshToken ?: "")
+                                }
+                                markAsRefreshTokenRequest()
                             }
-                        }.body<AuthResultDto>()
+                            if(refreshToken.status== HttpStatusCode.OK){
+                                var result = refreshToken.body<AuthResultDto>()
+                                General.updateSavedToken(authDao, result)
+                                BearerTokens(
+                                    accessToken = result.accessToken,
+                                    refreshToken = result.refreshToken
+                                )
+                            }else if(refreshToken.status== HttpStatusCode.Unauthorized) {
+                               authDao.nukeTable()
+                                null;
+                            }else {
+                                null;
+                            }
+                        } catch (cause: Exception) {
+                            null
+                        }
+
+
                         // Update saved tokens
-                        General.updateSavedToken(authDao, refreshToken)
-                        BearerTokens(
-                            accessToken = refreshToken.accessToken,
-                            refreshToken = refreshToken.refreshToken
-                        )
                     }
                 }
             }

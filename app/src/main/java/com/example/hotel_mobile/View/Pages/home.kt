@@ -38,98 +38,100 @@ fun HomePage(
 
 CustomErrorSnackBar(
     homeViewModel = homeViewModel,
-    authViewModel = null
-) {
-    Scaffold(
+    authViewModel = null,
+    nav = nav,
+    page = {
+        Scaffold(
 
-        modifier = Modifier
-            .padding(top = 35.dp)
-            .fillMaxWidth()
-            .fillMaxHeight()
-        ,
-     ) {
-        it.calculateTopPadding()
-        it.calculateBottomPadding()
-
-        Column(
             modifier = Modifier
+                .padding(top = 35.dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(
-                    Color.Gray.copy(0.17f)
-                ),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            ,
         ) {
+            it.calculateTopPadding()
+            it.calculateBottomPadding()
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(
+                        Color.Gray.copy(0.17f)
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
 
-            when (roomData.value == null) {
-                true -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                when (roomData.value == null) {
+                    true -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                        (0..4).forEach {
-                            RoomLoaingHolder()
+                            (0..4).forEach {
+                                RoomLoaingHolder()
+                            }
                         }
                     }
-                }
 
 
-                else -> {
-                    when (roomData.value!=null&&roomData.value!!.size == 0) {
-                        true -> {
+                    else -> {
+                        when (roomData.value!=null&&roomData.value!!.size == 0) {
+                            true -> {
 
-                            Column(
-                                modifier = Modifier
-
-                                    .fillMaxWidth()
-                                    .fillMaxHeight(),
-
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Box(
+                                Column(
                                     modifier = Modifier
-                                        .padding(bottom = 70.dp)
-//                            .background(Color.Red)
+
+                                        .fillMaxWidth()
+                                        .fillMaxHeight(),
+
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(bottom = 70.dp)
+//                            .background(Color.Red)
+                                    ) {
 
-                                    Image(
+                                        Image(
 
-                                        painter = painterResource(R.drawable.no_found_data),
-                                        contentDescription = "", contentScale = ContentScale.Fit
-                                    )
-                                }
-                            }
-                        }
-
-                        else -> {
-                            LazyColumn(
-                                modifier = Modifier
-                                    .padding(top = 5.dp)
-                                    .padding(horizontal = 15.dp)
-                                    .fillMaxSize(),
-                            ) {
-                                items(roomData.value!!.size) { index ->
-                                    RoomShape(
-                                        roomData.value!![index],
-                                        nav
-                                    )
+                                            painter = painterResource(R.drawable.no_found_data),
+                                            contentDescription = "", contentScale = ContentScale.Fit
+                                        )
+                                    }
                                 }
                             }
 
+                            else -> {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .padding(top = 5.dp)
+                                        .padding(horizontal = 15.dp)
+                                        .fillMaxSize(),
+                                ) {
+                                    items(roomData.value!!.size) { index ->
+                                        RoomShape(
+                                            roomData.value!![index],
+                                            nav
+                                        )
+                                    }
+                                }
+
+                            }
                         }
+
+
                     }
-
-
                 }
             }
         }
     }
-}
+)
 
 }

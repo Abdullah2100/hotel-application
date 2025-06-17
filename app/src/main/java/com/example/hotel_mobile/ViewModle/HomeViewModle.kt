@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.hotel_mobile.Data.Repository.HotelRepository
+import com.example.hotel_mobile.Data.Room.AuthDao
 import com.example.hotel_mobile.Data.Room.AuthModleEntity
 import com.example.hotel_mobile.Di.IoDispatcher
 import com.example.hotel_mobile.Di.MainDispatcher
@@ -44,6 +46,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json.Default.decodeFromString
@@ -57,8 +61,8 @@ class HomeViewModle @Inject constructor(
     val homeRepository: HotelRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
-
-    ) : ViewModel() {
+    private val authDao: AuthDao
+) : ViewModel() {
 
     private val _rooms = MutableStateFlow<MutableList<RoomModel>?>(null)
     val rooms = _rooms.asStateFlow()
@@ -79,6 +83,10 @@ class HomeViewModle @Inject constructor(
 
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    private  var _authDataStreem = authDao.readChunksLive().flowOn(ioDispatcher)
+    var authDataStreem = _authDataStreem
+
 
     private val _bookingData = MutableStateFlow<BookingModleHolder>(
         BookingModleHolder(
@@ -364,7 +372,7 @@ class HomeViewModle @Inject constructor(
     }
 
     fun getRooms(pageNumber: Int = 1, isBelongToMe: Boolean = false) {
-        viewModelScope.launch(ioDispatcher + errorHandling) {
+        viewModelScope.launch(mainDispatcher + errorHandling) {
 
             when (val result = homeRepository.getRooms(pageNumber, isBelongToMe)) {
                 is NetworkCallHandler.Successful<*> -> {
@@ -533,6 +541,13 @@ class HomeViewModle @Inject constructor(
 
 
         }
+    }
+
+    fun logout(){
+      viewModelScope.launch {
+
+          authDao.nukeTable()
+      }
     }
 
 

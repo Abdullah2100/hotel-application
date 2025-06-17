@@ -196,6 +196,7 @@ fun RoomPage(
     CustomErrorSnackBar(
         authViewModel = null,
         homeViewModel = homeViewModle,
+        nav = navController,
         page = {
             Scaffold(
                 topBar = {

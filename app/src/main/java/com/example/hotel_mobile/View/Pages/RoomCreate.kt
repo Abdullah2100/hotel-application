@@ -183,6 +183,7 @@ fun RoomCreate(
     CustomErrorSnackBar(
         authViewModel = null,
         homeViewModel = homeViewModel,
+        nav=nav,
         page = {
 
             Scaffold(

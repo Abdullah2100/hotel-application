@@ -65,98 +65,99 @@ fun BookingPage(
 
 
     CustomErrorSnackBar(
-        homeViewModel = homeViewModel, authViewModel = null
-    ) {
-        Scaffold(
+        homeViewModel = homeViewModel, authViewModel = null,
+        nav = nav,
+      page =   {
+            Scaffold(
 
-                    modifier = Modifier
-                .padding(top = 35.dp)
-                .fillMaxWidth()
-                .fillMaxHeight(),
-
-
-            ) {
-            it.calculateTopPadding()
-            it.calculateBottomPadding()
-
-            Column(
                 modifier = Modifier
+                    .padding(top = 35.dp)
                     .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(
-                        Color.Gray.copy(0.17f)
-                    ),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+                    .fillMaxHeight(),
 
 
-                when (bookings.value == null) {
-                    true -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
+                ) {
+                it.calculateTopPadding()
+                it.calculateBottomPadding()
 
-                            (0..4).forEach {
-                                BookingLoaingHolder()
-                            }
-                        }
-                    }
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(
+                            Color.Gray.copy(0.17f)
+                        ),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
 
-                    else -> {
+                    when (bookings.value == null) {
+                        true -> {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
 
-                        when (bookings.value.isNullOrEmpty()) {
-                            true -> {
-                                Column(
-                                    modifier = Modifier
-
-                                        .fillMaxWidth()
-                                        .fillMaxHeight(),
-
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.DateRange,
-                                        contentDescription = "",
-                                        modifier = Modifier.size(150.dp),
-                                        tint = Color.Black.copy(0.56f)
-                                    )
-                                    Text(
-                                        "لا يوجد اي حجوزات",
-                                        color = Color.Black.copy(0.56f),
-                                        fontWeight = FontWeight.Bold
-                                    )
-
+                                (0..4).forEach {
+                                    BookingLoaingHolder()
                                 }
                             }
+                        }
 
-                            else -> {
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .padding(top = 5.dp)
-                                        .padding(horizontal = 15.dp)
-                                        .fillMaxSize(),
-                                ) {
-                                    items(bookings.value!!.size) { index ->
-                                        BookingShape(
-                                            bookingData = bookings.value!![index]
+
+                        else -> {
+
+                            when (bookings.value.isNullOrEmpty()) {
+                                true -> {
+                                    Column(
+                                        modifier = Modifier
+
+                                            .fillMaxWidth()
+                                            .fillMaxHeight(),
+
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.DateRange,
+                                            contentDescription = "",
+                                            modifier = Modifier.size(150.dp),
+                                            tint = Color.Black.copy(0.56f)
                                         )
+                                        Text(
+                                            "لا يوجد اي حجوزات",
+                                            color = Color.Black.copy(0.56f),
+                                            fontWeight = FontWeight.Bold
+                                        )
+
                                     }
                                 }
 
+                                else -> {
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .padding(top = 5.dp)
+                                            .padding(horizontal = 15.dp)
+                                            .fillMaxSize(),
+                                    ) {
+                                        items(bookings.value!!.size) { index ->
+                                            BookingShape(
+                                                bookingData = bookings.value!![index]
+                                            )
+                                        }
+                                    }
+
+                                }
                             }
                         }
-                    }
 
+                    }
                 }
             }
         }
-    }
-
+    )
 
 }
